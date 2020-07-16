@@ -8,31 +8,49 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class Board extends JPanel implements ActionListener{
-
+/**
+ * This is the Board for a SpaceShip that can shoot Missiles. The applicator for this Board is ShootingMissilesEx
+ * This class extends JPanel
+ */
+public class Board extends JPanel implements ActionListener {
+    private final int ICRAFT_X = 40;
+    private final int ICRAFT_Y = 60;
+    private final int DELAY = 10;
     private Timer timer;
     private SpaceShip spaceShip;
-    private final int DELAY = 10;
 
+    /**
+     * Creates a Board for SpaceShip and Missile
+     */
     public Board() {
         initBoard();
     }
 
-    private void initBoard(){
-
+    /**
+     * Creates a new KeyListener
+     * Sets the background to black
+     * Creates a new spaceship
+     * Starts a timer for animation
+     */
+    private void initBoard() {
         addKeyListener(new TAdapter());
         setBackground(Color.BLACK);
         setFocusable(true);
 
-        spaceShip = new SpaceShip();
+        spaceShip = new SpaceShip(ICRAFT_X, ICRAFT_Y);
 
         timer = new Timer(DELAY, this);
         timer.start();
     }
 
+    /**
+     * Calls the doDrawing method
+     * @param g the Graphics object to protect
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -42,36 +60,66 @@ public class Board extends JPanel implements ActionListener{
         Toolkit.getDefaultToolkit().sync();
     }
 
+    /**
+     * Draws SpaceShip and available Missiles onto the Board
+     * @param g
+     */
     private void doDrawing(Graphics g) {
 
         Graphics2D g2d = (Graphics2D) g;
 
-        g2d.drawImage(spaceShip.getImage(), spaceShip.getX(),
-                spaceShip.getY(), this);
+        g2d.drawImage(spaceShip.getImage(), spaceShip.getX(), spaceShip.getY(), this);
+
+        List<Missile> missiles = spaceShip.getMissiles();
+
+        for (Missile missile: missiles) {
+            g2d.drawImage(missile.getImage(), missile.getX(), missile.getY(), this);
+        }
     }
 
-    @Override
+    /**
+     * Performed every DELAY milliseconds, calls the methods actionPerformed and
+     * @param e
+     */
     public void actionPerformed(ActionEvent e) {
 
-        step();
+        updateMissiles();
+        updateSpaceShip();
+
+        repaint();
     }
 
-    private void step() {
+    /**
+     * Goes through an Arraylist of missiles. If a missile is visible, it is moved. If it is not, then it is removed.
+     */
+    private void updateMissiles() {
+        List<Missile> missiles = spaceShip.getMissiles();
 
+        for(int i = 0; i<missiles.size(); i++) {
+            Missile missile = missiles.get(i);
+            if(missile.isVisible()) {
+                missile.move();
+            } else {
+                missiles.remove(i);
+            }
+        }
+    }
+
+    /**
+     * Moves the SpaceShip
+     */
+    private void updateSpaceShip() {
         spaceShip.move();
-
-        repaint(spaceShip.getX()-1, spaceShip.getY()-1,
-                spaceShip.getWidth()+2, spaceShip.getHeight()+2);
     }
 
+    /**
+     * Overrides the KeyAdapter's methods of keyReleased and keyPressed via a new adapter
+     */
     private class TAdapter extends KeyAdapter {
-
-        @Override
         public void keyReleased(KeyEvent e) {
             spaceShip.keyReleased(e);
         }
 
-        @Override
         public void keyPressed(KeyEvent e) {
             spaceShip.keyPressed(e);
         }

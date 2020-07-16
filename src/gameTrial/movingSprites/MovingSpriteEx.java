@@ -12,7 +12,7 @@ public class MovingSpriteEx  extends JFrame {
 
     private void initUI() {
 
-        add(new Board());
+        add(new MovingBoard());
 
         setTitle("Moving sprite");
         setSize(400, 300);
