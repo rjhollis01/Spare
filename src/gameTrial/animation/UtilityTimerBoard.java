@@ -28,7 +28,7 @@ public class UtilityTimerBoard extends JPanel{
 
     private void loadImage() {
 
-        ImageIcon ii = new ImageIcon("src/gameTrial/animation/star.png");
+        ImageIcon ii = new ImageIcon("src/gameTrial/animation/smile.png");
         star = ii.getImage();
     }
 

@@ -28,7 +28,7 @@ public class ThreadAnimationBoard extends JPanel implements Runnable{
 
     private void loadImage() {
 
-        ImageIcon ii = new ImageIcon("src/resources/star.png");
+        ImageIcon ii = new ImageIcon("src/resources/smile.png");
         star = ii.getImage();
     }
 

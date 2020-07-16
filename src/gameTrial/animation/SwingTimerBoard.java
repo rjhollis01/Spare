@@ -27,7 +27,7 @@ public class SwingTimerBoard extends JPanel implements ActionListener{
     }
 
     private void loadImage() {
-        ImageIcon ii = new ImageIcon("src/gameTrial/animation/smallV.png");
+        ImageIcon ii = new ImageIcon("src/gameTrial/animation/Smile.png");
         star = ii.getImage();
     }
 
